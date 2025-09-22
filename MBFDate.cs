@@ -11,12 +11,12 @@ namespace mbf_date
         private DateTime nextDate;
         private string format;
 
-        public MBFDate()
-            : this("yyyyMMdd")
+        public MBFDate(bool businessDates)
+            : this(businessDates, "yyyyMMdd")
         {
         }
 
-        public MBFDate(string dateFormat)
+        public MBFDate(bool businessDates, string dateFormat)
         {
             format = dateFormat;
             today = DateTime.Today;
@@ -25,7 +25,13 @@ namespace mbf_date
             // On Mondays the previous date is Friday
             if (today.DayOfWeek == DayOfWeek.Monday)
             {
-                subtractDays = -3;
+                if (businessDates)
+                {
+                    subtractDays = -3;
+                } else
+                {
+                    subtractDays = -1;
+                }
             }
             previousDate = today.AddDays(subtractDays);
 
@@ -33,7 +39,14 @@ namespace mbf_date
             // On Fridays the next date is Monday
             if (today.DayOfWeek == DayOfWeek.Friday)
             {
-                addDays = 3;
+                if (businessDates)
+                {
+                    addDays = 3;
+                }
+                else
+                {
+                    addDays = 1;
+                }
             }
             nextDate = today.AddDays(addDays);
         }
