@@ -8,17 +8,21 @@ namespace mbf_date
     {
         static void Main(string[] args)
         {
+            bool businessDates = false; 
             int currentDate = 0;
             int previousDate = 0;
             int nextDate = 0;
             String dateFormat = null;
 
-            Getopt g = new Getopt("mbf_date", args, "?cpnf:");
+            Getopt g = new Getopt("mbf_date", args, "?bcpnf:");
             int c;
             while ((c = g.getopt()) != -1)
             {
             	switch(c)
             	{
+                    case 'b':
+                        businessDates = true;
+                        break;
                     case 'c':
                         currentDate = 1;
                         break;
@@ -32,7 +36,8 @@ namespace mbf_date
                         dateFormat = g.Optarg;
             			break;
             		case '?':
-                        Console.WriteLine("mbf_date [-c|-p|-n] [-f<date_format>]");
+                        Console.WriteLine("mbf_date [-b] [-c|-p|-n] [-f<date_format>]");
+                        Console.WriteLine("-b Use business dates");
                         Console.WriteLine("-c Current date");
                         Console.WriteLine("-p Previous date");
                         Console.WriteLine("-n Next date");
@@ -55,11 +60,11 @@ namespace mbf_date
 
             if (dateFormat == null)
             {
-                d = new MBFDate();
+                d = new MBFDate(businessDates);
             }
             else
             {
-                d = new MBFDate(dateFormat);
+                d = new MBFDate(businessDates, dateFormat);
             }
 
             if (currentDate == 1)
